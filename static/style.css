@@ -1,0 +1,9 @@
+:root{--blue-1:#0b5ed7;--blue-2:#0f172a;--accent:#60a5fa}
+body{background:linear-gradient(180deg,#f0f6ff,#f8fbff);font-family:Inter,system-ui,Arial,sans-serif}
+.navbar-brand{letter-spacing:0.6px}
+.hero-blue{min-height:56vh;background:linear-gradient(135deg,var(--blue-1),#0b63d6);border-radius:12px;padding:48px 20px;margin-top:12px;box-shadow:0 10px 30px rgba(11,94,215,0.12)}
+.feature-card{background:#ffffff;border-radius:10px}
+.card{border-radius:12px}
+.question-card{border-left:6px solid var(--blue-1)}
+.progress{background:#e9f0ff}
+.btn-primary{background:var(--blue-1);border-color:var(--blue-1)}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Take Exam{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">Exam</h2>
+    <form id="examForm">
+        {% for q in questions %}
+        <div class="mb-3 p-3 question-card" style="background:rgba(255,255,255,0.08);border-radius:10px;">
+            <p><strong>{{ loop.index }}. {{ q.question }}</strong></p>
+            {% for opt in [q.option1, q.option2, q.option3, q.option4] %}
+                {% if opt %}
+                <div>
+                    <input type="radio" name="q{{ q.question_id }}" value="{{ opt }}" onchange="checkAnswer({{ q.question_id }}, this.value)">
+                    {{ opt }}
+                </div>
+                {% endif %}
+            {% endfor %}
+            <p id="feedback-{{ q.question_id }}" style="margin-top:5px; font-weight:bold;"></p>
+        </div>
+        {% endfor %}
+    </form>
+</div>
+
+<script>
+function checkAnswer(question_id, selected){
+    const feedbackEl = document.getElementById(`feedback-${question_id}`);
+    feedbackEl.innerText = "Checking...";
+    feedbackEl.style.color = "#ffff00";
+
+    fetch("/exam/check", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({question_id: question_id, selected: selected})
+    })
+    .then(res => res.json())
+    .then(data => {
+        feedbackEl.innerText = data.feedback;
+        feedbackEl.style.color = data.status === "correct" ? "#00f0ff" : "#ff4444";
+    })
+    .catch(err => {
+        feedbackEl.innerText = "Error fetching AI feedback.";
+        feedbackEl.style.color = "#ff4444";
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam</title>
+<style>
+body { font-family: 'Roboto', sans-serif; background:#1e3c72; color:white; margin:0; }
+.container { padding:2rem; max-width:800px; margin:auto; }
+h1 { text-align:center; color:#00f0ff; }
+.question-card { background: rgba(255,255,255,0.08); backdrop-filter:blur(10px); padding:1rem; margin-bottom:1rem; border-radius:10px; }
+.question-card h3 { color:#00f0ff; }
+.option { display:block; margin:0.3rem 0; }
+.submit-btn { padding:0.7rem 1.5rem; background:#00f0ff; border:none; border-radius:10px; color:#1e3c72; font-weight:700; cursor:pointer; margin-top:1rem; }
+.submit-btn:hover { background:#00e0ff; }
+.back-link { display:block; text-align:center; margin-top:1rem; color:#00f0ff; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Exam</h1>
+<form method="POST">
+    {% for q in questions %}
+    <div class="question-card">
+        <h3>{{ loop.index }}. {{ q.question }}</h3>
+        {% for opt in ['option1','option2','option3','option4'] %}
+            {% if q[opt] %}
+            <label class="option">
+                <input type="radio" name="ans_{{ q.q_id }}" value="{{ q[opt] }}" required> {{ q[opt] }}
+            </label>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <button class="submit-btn" type="submit">Submit Exam</button>
+</form>
+<a class="back-link" href="/dashboard">Back to Dashboard</a>
+</div>
+</body>
+</html>

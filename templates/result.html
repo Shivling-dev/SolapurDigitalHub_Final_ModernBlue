@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center mt-5">
+    <h2 class="text-primary">Your Result</h2>
+    <p class="lead">You scored {{ score }} out of {{ total }}</p>
+
+    <hr>
+    <h4 class="mt-4">Question-wise Feedback:</h4>
+    <ul class="list-group mt-3">
+        {% for f in feedback %}
+        <li class="list-group-item">
+            <strong>Q:</strong> {{ f.question }}<br>
+            <strong>Your Answer:</strong> {{ f.your_answer or 'No Answer' }} <br>
+            <strong>Correct Answer:</strong> {{ f.correct_answer }} <br>
+            <strong>Feedback:</strong> 
+            {% if f.is_correct %}
+                <span class="text-success">Correct ✅</span>
+            {% else %}
+                <span class="text-danger">Wrong ❌</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

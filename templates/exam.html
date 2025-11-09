@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exams</title>
+<style>
+body { font-family: 'Roboto', sans-serif; background:#1e3c72; color:white; margin:0; }
+.container { padding:2rem; max-width:800px; margin:auto; }
+h1 { text-align:center; color:#00f0ff; }
+.exam-card { background: rgba(255,255,255,0.08); backdrop-filter:blur(10px); padding:1rem; margin-bottom:1rem; border-radius:10px; display:flex; justify-content:space-between; align-items:center; }
+.start-btn { padding:0.5rem 1rem; background:#00f0ff; color:#1e3c72; font-weight:bold; border:none; border-radius:8px; text-decoration:none; cursor:pointer; }
+.start-btn:hover { background:#00e0ff; }
+.back-link { display:block; text-align:center; margin-top:1rem; color:#00f0ff; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Upcoming Exams</h1>
+
+{% for exam in exams %}
+<div class="exam-card">
+    <div>
+        <h3>{{ exam.title }}</h3>
+        <p>{{ exam.description }}</p>
+        <p><strong>Date:</strong> {{ exam.exam_date }}</p>
+    </div>
+    <a class="start-btn" href="{{ url_for('start_exam', exam_id=exam.exam_id) }}">Start Exam</a>
+</div>
+{% endfor %}
+
+<a class="back-link" href="/dashboard">Back to Dashboard</a>
+</div>
+</body>
+</html>

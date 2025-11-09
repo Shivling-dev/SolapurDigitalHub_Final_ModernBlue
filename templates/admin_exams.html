@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Exams</title>
+<style>
+body {font-family:'Roboto',sans-serif; background:#1e3c72; color:white; margin:0;}
+.container {padding:2rem; max-width:900px; margin:auto;}
+h1 {text-align:center; color:#00f0ff;}
+table {width:100%; border-collapse:collapse;}
+th, td {padding:1rem; border-bottom:1px solid rgba(255,255,255,0.2);}
+th {background:#00f0ff; color:#1e3c72;}
+tr:hover {background: rgba(0,240,255,0.1);}
+.add-btn {padding:0.7rem 1.5rem; background:#00f0ff; color:#1e3c72; font-weight:700; border:none; border-radius:10px; cursor:pointer; margin-bottom:1rem;}
+.delete-btn {padding:0.3rem 0.7rem; background:red; color:white; border:none; border-radius:8px; cursor:pointer;}
+.button-group {display:flex; gap:1rem; margin-bottom:1rem;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Manage Exams</h1>
+<div class="button-group">
+  <a href="/admin/dashboard"><button class="add-btn">Back to Dashboard</button></a>
+  <a href="/admin/exams/add"><button class="add-btn">+ Add Exam</button></a>
+</div>
+<table>
+<tr>
+<th>Title</th>
+<th>Date</th>
+<th>Total Questions</th>
+<th>Actions</th>
+</tr>
+{% for exam in exams %}
+<tr>
+<td>{{ exam.title }}</td>
+<td>{{ exam.exam_date }}</td>
+<td>{{ exam.total_questions }}</td>
+<td><a href="/admin/exams/delete/{{ exam.exam_id }}"><button class="delete-btn">Delete</button></a></td>
+</tr>
+{% endfor %}
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* Base Styles */
+body {
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+@keyframes gradientBG {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.container { max-width:1000px; margin:2rem auto; display:flex; flex-direction:column; gap:2rem; padding:1rem; }
+.row { display:flex; flex-wrap:wrap; gap:20px; }
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(15px);
+    padding:2rem;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff;
+    flex:1;
+    min-width:250px;
+    position:relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover { transform:translateY(-5px); box-shadow:0 15px 40px rgba(0,0,0,0.6); }
+.card h4, .card h6 { color:#00f0ff; margin-top:0; text-shadow:0 0 5px rgba(0,240,255,0.5);}
+.card p { font-size:0.95rem; margin:0.5rem 0 0;}
+.add-btn { margin-top:1rem; padding:0.7rem 1.5rem; background:#00f0ff; color:#1e3c72; font-weight:700; border:none; border-radius:10px; cursor:pointer; transition: transform 0.3s, box-shadow 0.3s; }
+.add-btn:hover { transform:scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,0.4); }
+table { width:100%; border-collapse:collapse; background: rgba(255,255,255,0.05); border-radius:12px; overflow:hidden; box-shadow:0 5px 20px rgba(0,0,0,0.3); }
+thead { background: rgba(0,240,255,0.2);}
+thead th { color:#fff; font-weight:700; padding:1rem; text-align:left;}
+tbody td { padding:0.8rem 1rem; border-bottom:1px solid rgba(255,255,255,0.1); font-size:0.95rem;}
+tbody tr:hover { background: rgba(0,240,255,0.1);}
+@media(max-width:768px){ .row{flex-direction:column;} tbody td, thead th{padding:0.6rem;} }
+select { margin-top:1rem; padding:0.5rem; border-radius:8px; border:none; font-weight:700; background:rgba(0,240,255,0.1); color:#fff; }
+</style>
+
+<div class="container">
+    <!-- Dashboard Cards -->
+    <div class="row">
+        <div class="card" style="flex:2;">
+            <h4>Welcome, {{ session.student_name }}</h4>
+            <p>Ready to attempt your next test?</p>
+            <a href="/exam"><button class="add-btn">Start Exam</button></a>
+        </div>
+        <div class="card" style="flex:1;">
+            <h6>Quick Info</h6>
+            <p>Check previous results, practice more, and improve your score.</p>
+        </div>
+        <div class="card" style="flex:1;">
+            <h6>AI Study Assistant</h6>
+            <p id="ai-recommendation">Select an exam below to see AI suggestions.</p>
+        </div>
+    </div>
+
+    <!-- Exam Selection -->
+    <div class="card">
+        <h4>Select Exam to Analyze</h4>
+        <select id="examSelect">
+            {% for result in results %}
+                <option value="{{ loop.index0 }}">{{ result.exam_name }} ({{ result.exam_date }})</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Result Table -->
+    <div class="card" style="overflow-x:auto;">
+        <h4>Previous Results</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Exam</th>
+                    <th>Date</th>
+                    <th>Score</th>
+                    <th>Accuracy (%)</th>
+                    <th>Time Spent (min)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                <tr>
+                    <td>{{ r.exam_name }}</td>
+                    <td>{{ r.exam_date }}</td>
+                    <td>{{ r.score|default(0) }}</td>
+                    <td>{{ r.accuracy|default(0) }}</td>
+                    <td>{{ r.time_spent|default(0) }}</td>
+                    <td>{{ r.status|default('Pending') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Predictive & Multi-Metric Chart -->
+    <div class="card">
+        <h4>Performance & Predictions</h4>
+        <canvas id="predictionChart" height="300"></canvas>
+    </div>
+</div>
+
+<script>
+const results = [
+    {% for r in results %}
+    {
+        name: "{{ r.exam_name }}",
+        date: "{{ r.exam_date }}",
+        score: {{ r.score|default(0) }},
+        predicted: {{ r.predicted_score|default(0) }},
+        accuracy: {{ r.accuracy|default(0) }},
+        time: {{ r.time_spent|default(0) }},
+        ai_tip: "{{ r.ai_tip|default('Keep practicing to improve.') }}",
+        topics_weak: "{{ r.topics_weak|default('None') }}"
+    },
+    {% endfor %}
+];
+
+const ctx = document.getElementById('predictionChart').getContext('2d');
+let chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: results.map(r => r.date),
+        datasets: [
+            { label:'Score', data: results.map(r=>r.score), borderColor:'#00f0ff', backgroundColor:'rgba(0,240,255,0.2)', tension:0.3, fill:true, pointRadius:5 },
+            { label:'Predicted Score', data: results.map(r=>r.predicted), borderColor:'#ff6b6b', backgroundColor:'rgba(255,107,107,0.2)', borderDash:[5,5], tension:0.3, fill:false, pointRadius:5 },
+            { label:'Accuracy (%)', data: results.map(r=>r.accuracy), borderColor:'#f0ff00', backgroundColor:'rgba(240,255,0,0.2)', tension:0.3, fill:true, pointRadius:5 },
+            { label:'Time Spent (min)', data: results.map(r=>r.time), borderColor:'#00ff6b', backgroundColor:'rgba(0,255,107,0.2)', tension:0.3, fill:true, pointRadius:5 }
+        ]
+    },
+    options: {
+        responsive:true,
+        plugins:{ legend:{ labels:{color:'#fff'} }, tooltip:{ mode:'index', intersect:false } },
+        scales:{ x:{ ticks:{color:'#fff'}, grid:{color:'rgba(255,255,255,0.1)'} },
+                 y:{ ticks:{color:'#fff', beginAtZero:true}, grid:{color:'rgba(255,255,255,0.1)'} } }
+    }
+});
+
+// Update AI recommendations and highlight selected exam
+const select = document.getElementById('examSelect');
+const aiText = document.getElementById('ai-recommendation');
+
+select.addEventListener('change', function(){
+    const idx = parseInt(this.value);
+    const r = results[idx];
+    aiText.innerHTML = `<strong>AI Tip:</strong> ${r.ai_tip}<br><strong>Weak Topics:</strong> ${r.topics_weak}`;
+    chart.data.datasets.forEach(ds => {
+        ds.pointBackgroundColor = results.map((res,i)=> i===idx?'#ffff00':ds.borderColor);
+    });
+    chart.update();
+});
+</script>
+{% endblock %}

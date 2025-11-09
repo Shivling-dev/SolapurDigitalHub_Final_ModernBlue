@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solapur Digital Hub - Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    /* Base Styles */
+    * {margin:0; padding:0; box-sizing:border-box; font-family:'Roboto', sans-serif;}
+    body {background: linear-gradient(135deg,#1e3c72,#2a5298,#1e3c72); background-size:400% 400%; animation: gradientBG 15s ease infinite; min-height:100vh; color:white;}
+    @keyframes gradientBG {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
+    /* Navbar */
+    nav {
+        display:flex; justify-content:space-between; align-items:center;
+        padding:1rem 5%; background: rgba(0,0,0,0.25); backdrop-filter: blur(10px);
+        border-radius: 0 0 20px 20px; box-shadow:0 5px 25px rgba(0,0,0,0.6);
+        position: sticky; top:0; z-index:100;
+    }
+    nav .logo {font-size:1.8rem; font-weight:700; color:#fff; text-shadow: 0 0 8px #fff, 0 0 20px #00f0ff;}
+    nav ul.nav-links {display:flex; gap:2rem;}
+    nav ul.nav-links li {list-style:none;}
+    nav ul.nav-links li a {padding:0.5rem 1rem; color:white; font-weight:500; text-decoration:none; border-radius:10px; transition: all 0.3s;}
+    nav ul.nav-links li a:hover {background: rgba(0,240,255,0.2); box-shadow:0 0 15px rgba(0,240,255,0.5); transform: translateY(-3px); color:#00f0ff;}
+    nav ul.nav-links li a.logout-btn {background: #ff4d4d;}
+    nav ul.nav-links li a.logout-btn:hover {background:#ff1a1a; box-shadow:0 0 15px rgba(255,0,0,0.6); color:white; transform: translateY(-3px);}
+
+    /* Dashboard Container */
+    .dashboard {display:flex; flex-wrap:wrap; gap:2rem; padding:3rem 5%; margin-top:2rem;}
+
+    /* Stat Cards */
+    .card {
+        flex:1 1 250px; background: rgba(255,255,255,0.08); backdrop-filter: blur(15px);
+        padding:2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition: transform 0.3s;
+    }
+    .card:hover {transform: translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.7);}
+    .card h3 {font-size:1.2rem; color:#00f0ff; margin-bottom:1rem; text-shadow: 0 0 5px rgba(0,240,255,0.7);}
+    .card h2 {font-size:2rem; font-weight:700; text-shadow: 0 0 8px #00f0ff;}
+    .card p {margin-top:0.5rem; font-weight:500;}
+
+    /* Charts */
+    .charts {flex:1 1 100%; display:flex; flex-wrap:wrap; gap:2rem; margin-top:2rem;}
+    .chart-card {flex:1 1 500px; background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding:2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+    .chart-card canvas {width:100% !important; height:300px !important;}
+
+    /* AI Assistant Box */
+    .ai-box {
+        position:fixed; bottom:2rem; right:2rem; width:300px; background: rgba(255,255,255,0.1); border-radius:15px;
+        backdrop-filter: blur(10px); padding:1rem; box-shadow:0 5px 20px rgba(0,240,255,0.3); color:white;
+    }
+    .ai-box h4 {color:#00f0ff; margin-bottom:0.5rem;}
+    .ai-box p {font-size:0.85rem; line-height:1.4;}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Solapur Digital Hub</div>
+    <ul class="nav-links">
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/students">Students</a></li>
+        <li><a href="/admin/exams">Exams</a></li>
+        <li><a href="/admin/view_results">Results</a></li>
+        <li><a href="/logout" class="logout-btn">Logout</a></li>
+    </ul>
+</nav>
+
+<div class="dashboard">
+    <!-- Stat Cards -->
+    <div class="card">
+        <h3>Total Students</h3>
+        <h2 id="total-students">0</h2>
+        <p>Registered students</p>
+    </div>
+    <div class="card">
+        <h3>Total Exams</h3>
+        <h2 id="total-exams">0</h2>
+        <p>Exams conducted</p>
+    </div>
+    <div class="card">
+        <h3>Total Results</h3>
+        <h2 id="total-results">0</h2>
+        <p>Exams taken</p>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts">
+        <div class="chart-card">
+            <h3>Score Distribution</h3>
+            <canvas id="scoreChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Exams Participation</h3>
+            <canvas id="examChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- AI Assistant -->
+<div class="ai-box">
+    <h4>💡 AI Assistant</h4>
+    <p>Welcome admin! Click on a card to view details. Hover charts for insights. Keep an eye on student performance trends.</p>
+</div>
+
+<script>
+    // Example data for counters
+    document.getElementById('total-students').innerText = 1250;
+    document.getElementById('total-exams').innerText = 300;
+    document.getElementById('total-results').innerText = 1150;
+
+    // Chart.js Example
+    const scoreCtx = document.getElementById('scoreChart').getContext('2d');
+    const scoreChart = new Chart(scoreCtx, {
+        type:'bar',
+        data: {
+            labels:['50','60','70','80','90','100'],
+            datasets:[{
+                label:'Number of Students',
+                data:[5,15,35,45,25,10],
+                backgroundColor:'rgba(0,240,255,0.6)',
+                borderColor:'#00f0ff',
+                borderWidth:1
+            }]
+        },
+        options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
+    });
+
+    const examCtx = document.getElementById('examChart').getContext('2d');
+    const examChart = new Chart(examCtx, {
+        type:'line',
+        data: {
+            labels:['Jan','Feb','Mar','Apr','May','Jun'],
+            datasets:[{
+                label:'Exams Taken',
+                data:[10,20,25,40,35,50],
+                backgroundColor:'rgba(0,240,255,0.3)',
+                borderColor:'#00f0ff',
+                borderWidth:3,
+                fill:true,
+                tension:0.3
+            }]
+        },
+        options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
+    });
+</script>
+
+</body>
+</html>

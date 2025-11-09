@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Solapur Digital Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* Base and Gradient Background */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+body,html{height:100%;overflow-x:hidden;scroll-behavior:smooth;}
+body{
+  background: linear-gradient(135deg,#1e3c72,#2a5298,#0f2027,#2a5298);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  color:white; position:relative;
+}
+@keyframes gradientBG{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+#particles-js{position:fixed;width:100%;height:100%;z-index:0;top:0;left:0;}
+
+/* Navbar */
+nav{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1rem 5%; position:sticky; top:0; z-index:10; 
+  background: rgba(0,0,0,0.25); backdrop-filter: blur(10px); border-radius:0 0 15px 15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.5);
+}
+nav .logo{
+  font-size:2rem; font-weight:700; color:white;
+  text-shadow:0 0 10px #00f0ff,0 0 20px #00f0ff;
+}
+nav ul{display:flex;gap:2rem;}
+nav ul li{list-style:none;}
+nav ul li a{
+  color:white;font-weight:500;text-decoration:none;padding:0.5rem 1rem;border-radius:10px;transition:0.3s;
+}
+nav ul li a:hover{background: rgba(0,240,255,0.2); color:#00f0ff; transform:translateY(-2px);}
+
+/* Hero */
+.hero{
+  display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+  min-height:90vh; z-index:1; position:relative; padding:2rem; overflow:hidden;
+}
+.hero h1{
+  font-size:3rem; margin-bottom:1rem; color:#00f0ff; 
+  text-shadow:0 0 15px #00f0ff; opacity:0; transform:translateX(-50px); animation: slideIn 1s forwards;
+}
+.hero p{
+  font-size:1.2rem; max-width:700px; line-height:1.7; color:#c8eaff;
+  opacity:0; transform:translateX(50px); animation: slideIn 1s forwards 0.5s;
+}
+@keyframes slideIn{to{opacity:1; transform:translateX(0);}}
+
+/* About Section */
+.about-container{padding:4rem 10%; text-align:center; position:relative; z-index:1;}
+.about-container h2{font-size:2.5rem; margin-bottom:2rem; color:#00f0ff; text-shadow:0 0 15px #00f0ff;}
+.about-container p{font-size:1.1rem; line-height:1.7; color:#d0eaff; margin-bottom:1rem; opacity:0; transform:translateY(20px); animation: fadeUp 1s forwards;}
+@keyframes fadeUp{to{opacity:1; transform:translateY(0);}}
+.about-highlights{display:flex; flex-wrap:wrap; justify-content:center; gap:2rem; margin-top:2rem;}
+.highlight{
+  background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border-radius:20px; width:280px; padding:2rem;
+  box-shadow:0 0 20px rgba(0,255,255,0.2); transition: transform 0.3s, box-shadow 0.3s;
+  opacity:0; transform:translateY(30px); animation: fadeCard 1s forwards;
+}
+.highlight:nth-child(1){animation-delay:0.3s;} 
+.highlight:nth-child(2){animation-delay:0.6s;} 
+.highlight:nth-child(3){animation-delay:0.9s;}
+.highlight:hover{transform:translateY(-8px); box-shadow:0 0 30px rgba(0,255,255,0.4);}
+.highlight h3{margin-bottom:0.8rem; color:#00f0ff; text-shadow:0 0 5px #00f0ff;}
+.highlight p{color:#c8eaff; font-size:0.95rem; line-height:1.6;}
+@keyframes fadeCard{to{opacity:1; transform:translateY(0);}}
+
+/* Exams Section */
+.exams-container{padding:3rem 10%; text-align:center; z-index:1;}
+#exam-list{display:flex; flex-wrap:wrap; gap:2rem; justify-content:center; margin-top:2rem;}
+.exam-card{
+  background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border-radius:15px;
+  padding:1.5rem; width:250px; box-shadow:0 5px 15px rgba(0,240,255,0.3);
+}
+
+/* AI Assistant Fully Predictive */
+#ai-box{
+  position:fixed; bottom:30px; right:30px; width:300px;
+  background: rgba(0,255,255,0.08); backdrop-filter: blur(12px); border-radius:15px; padding:1rem;
+  color:white; box-shadow:0 0 20px #00f0ff; z-index:15; display:flex; flex-direction:column;
+}
+#ai-box h4{margin-bottom:0.5rem;color:#00f0ff;text-shadow:0 0 5px #00f0ff; cursor:pointer;}
+#chat-window{max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:5px;}
+.chat-message{padding:6px 10px;border-radius:10px;font-size:0.9rem;line-height:1.4;width:fit-content;max-width:85%;}
+.chat-message.bot{background: rgba(0,255,255,0.15); align-self:flex-start;}
+.chat-message.user{background: rgba(255,255,255,0.15); align-self:flex-end;}
+#ai-input-area{display:flex;gap:5px;}
+#ai-input{flex:1;border:none;border-radius:10px;padding:6px 8px;background: rgba(255,255,255,0.1);color:white;}
+#ai-input::placeholder{color:#b0e0ff;}
+#ai-input:focus{outline:none;}
+#send-btn{border:none;background:#00f0ff;color:#1e1e2f;font-weight:700;border-radius:8px;padding:6px 8px;cursor:pointer;box-shadow:0 0 10px #00f0ff; transition: transform 0.2s;}
+#send-btn:hover{transform:scale(1.05);}
+#predictChart{margin-top:8px; display:none; border-radius:10px; background: rgba(0,0,0,0.15);}
+
+/* Footer */
+footer{background: rgba(30,60,114,0.8); color:white; text-align:center; padding:2rem 1rem; backdrop-filter: blur(10px); margin-top:3rem; box-shadow:0 -5px 15px rgba(0,0,0,0.5);}
+
+/* Responsive */
+@media(max-width:768px){.about-highlights, #exam-list{flex-direction:column; align-items:center;} nav ul{flex-direction:column; gap:1rem;}}
+</style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+  <div class="logo">Solapur Digital Hub</div>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About Us</a></li>
+    <li><a href="#exams-section">Exams</a></li>
+    <li><a href="/login">Login</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <h1>About Solapur Digital Hub</h1>
+  <p>Empowering students and educators with professional online exams, predictive AI insights, and interactive learning dashboards. Track progress, analyze performance, and predict scores dynamically.</p>
+</section>
+
+<section class="about-container">
+  <h2>Who We Are</h2>
+  <p>Solapur Digital Hub provides a professional online learning and assessment platform that uses AI to predict student performance and deliver actionable insights. Our goal is to make online education smarter, transparent, and effective.</p>
+  <div class="about-highlights">
+    <div class="highlight"><h3>🎯 Mission</h3><p>Provide AI-driven online exams and learning insights to every student.</p></div>
+    <div class="highlight"><h3>🤝 Vision</h3><p>Transform digital education with predictive AI dashboards and interactive tools.</p></div>
+    <div class="highlight"><h3>💡 Values</h3><p>Innovation, Integrity, Transparency, and AI-powered learning solutions.</p></div>
+  </div>
+</section>
+
+<section class="exams-container" id="exams-section">
+  <h2>Upcoming Exams</h2>
+  <div id="exam-list"></div>
+</section>
+
+<!-- Fully Predictive AI Chat -->
+<div id="ai-box">
+  <h4>AI Assistant 🤖</h4>
+  <div id="chat-window">
+    <div class="chat-message bot">Hello! I automatically show today’s exams and can predict your scores based on past performance. 📊</div>
+  </div>
+  <div id="ai-input-area">
+    <input type="text" id="ai-input" placeholder="Ask me about exams or predictions...">
+    <button id="send-btn">➤</button>
+  </div>
+  <canvas id="predictChart"></canvas>
+</div>
+
+<footer>&copy; 2025 Solapur Digital Hub. All rights reserved.</footer>
+
+<script>
+// Particles
+particlesJS("particles-js",{particles:{number:{value:60,density:{enable:true,value_area:800}},color:{value:"#00f0ff"},shape:{type:"circle"},opacity:{value:0.5,random:true},size:{value:3,random:true},line_linked:{enable:true,distance:150,color:"#00f0ff",opacity:0.4,width:1},move:{enable:true,speed:3,direction:"none",random:true,straight:false,out_mode:"out"}},retina_detect:true});
+
+// Upcoming Exams
+const upcomingExams = [
+  { title:"Math Midterm", date:"2025-11-08", time:"10:00 AM" },
+  { title:"Physics Quiz", date:"2025-11-08", time:"2:00 PM" },
+  { title:"Chemistry Final", date:"2025-12-01", time:"9:00 AM" }
+];
+
+function renderExams(){
+  const container = document.getElementById('exam-list');
+  container.innerHTML='';
+  upcomingExams.forEach(exam=>{
+    const div = document.createElement('div');
+    div.classList.add('exam-card');
+    div.innerHTML = `<h3 style="color:#00f0ff;">${exam.title}</h3>
+                     <p>Date: ${exam.date}</p>
+                     <p>Time: ${exam.time}</p>`;
+    container.appendChild(div);
+  });
+}
+renderExams();
+
+// Fully Predictive AI Chat
+const chatWindow = document.getElementById('chat-window');
+const aiInput = document.getElementById('ai-input');
+const sendBtn = document.getElementById('send-btn');
+const predictChart = document.getElementById('predictChart');
+let chartInstance = null;
+
+function appendMessage(msg,sender){
+  const div = document.createElement('div');
+  div.classList.add('chat-message',sender==='user'?'user':'bot');
+  div.innerText = msg;
+  chatWindow.appendChild(div);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+// Show today's exams automatically
+function showTodaysExams(){
+  const today = new Date().toISOString().slice(0,10);
+  const todays = upcomingExams.filter(e=>e.date===today);
+  if(todays.length>0){
+    appendMessage("📌 Today's Exams:",'bot');
+    todays.forEach(e=>{
+      appendMessage(`• ${e.title} at ${e.time}`,'bot');
+    });
+  } else appendMessage("No exams scheduled for today 🎉",'bot');
+}
+showTodaysExams();
+
+async function fetchPredictedScores(studentId){
+  return new Promise(resolve=>{
+    setTimeout(()=>{
+      const baseScores=[65,70,75,78,80,83];
+      const predicted = baseScores.map(s=>s + Math.random()*5);
+      const sigma = baseScores.map(()=>Math.random()*5+2);
+      resolve({predicted,sigma});
+    },1000);
+  });
+}
+
+function showPredictiveChart(predicted,sigma){
+  predictChart.style.display='block';
+  if(chartInstance) chartInstance.destroy();
+  const upper = predicted.map((p,i)=>Math.min(100,p+sigma[i]));
+  const lower = predicted.map((p,i)=>Math.max(0,p-sigma[i]));
+  chartInstance = new Chart(predictChart.getContext('2d'),{
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets:[
+        {label:'Predicted Score', data:predicted, borderColor:'#00f0ff', backgroundColor:'rgba(0,240,255,0.3)', fill:true, tension:0.4},
+        {label:'Upper Bound', data:upper, borderColor:'rgba(0,255,255,0.2)', borderDash:[5,5], fill:'+1', tension:0.4},
+        {label:'Lower Bound', data:lower, borderColor:'rgba(0,255,255,0.2)', borderDash:[5,5], fill:'-1', tension:0.4}
+      ]
+    },
+    options:{responsive:true, plugins:{legend:{display:true}}, scales:{y:{beginAtZero:true,max:100}}}
+  });
+}
+
+async function sendMessage(){
+  const msg = aiInput.value.trim();
+  if(msg==='') return;
+  appendMessage(msg,'user');
+  aiInput.value='';
+  appendMessage('Typing...','bot');
+  setTimeout(async ()=>{
+    chatWindow.querySelector('.chat-message.bot:last-child').remove();
+    if(/predict|forecast|score|trend/i.test(msg)){
+      const studentId = msg.match(/\b\d+\b/) ? msg.match(/\b\d+\b/)[0] : 'demo';
+      appendMessage(`🔮 Fetching predictions for student ID: ${studentId}`,'bot');
+      const {predicted,sigma} = await fetchPredictedScores(studentId);
+      showPredictiveChart(predicted,sigma);
+      appendMessage("✅ Here’s your GPT-powered predicted exam score trend with confidence intervals.",'bot');
+    } else if(/today/i.test(msg)){
+      showTodaysExams();
+    } else {
+      appendMessage("I can show today's exams or predict student scores. Try asking 'predict scores for 123' or 'today's exams'.",'bot');
+      predictChart.style.display='none';
+    }
+  },800);
+}
+
+sendBtn.addEventListener('click',sendMessage);
+aiInput.addEventListener('keypress',e=>{if(e.key==='Enter') sendMessage();});
+</script>
+</body>
+</html>

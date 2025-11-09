@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Results | Solapur Digital Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Roboto', sans-serif; }
+    body {
+        min-height:100vh;
+        background: linear-gradient(135deg,#1e3c72,#2a5298);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        color: #fff;
+    }
+    @keyframes gradientBG {
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1100px;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2rem;
+        color: #00f0ff;
+        text-shadow: 0 0 5px rgba(0,240,255,0.5);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+
+    thead {
+        background: rgba(0,240,255,0.2);
+    }
+
+    thead th {
+        color: #fff;
+        font-weight: 700;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    tbody td {
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+        background: rgba(0,240,255,0.1);
+    }
+
+    a.back-btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.7rem 1.5rem;
+        background: #00f0ff;
+        color: #1e3c72;
+        font-weight: 700;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    a.back-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    @media(max-width: 768px){
+        tbody td, thead th { padding: 0.6rem; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>All Exam Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Email</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ r.name }}</td>
+                <td>{{ r.email }}</td>
+                <td>{{ r.score }}</td>
+                <td>{{ r.total }}</td>
+                <td>{{ r.taken_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/admin/dashboard" class="back-btn">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

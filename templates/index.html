@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solapur Digital Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<style>
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Roboto', sans-serif;}
+body, html{height:100%; overflow-x:hidden;}
+
+body{
+  background: linear-gradient(135deg,#1e3c72,#2a5298,#0f2027,#2a5298);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  color:white;
+}
+@keyframes gradientBG{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Particles */
+#particles-js{
+  position:fixed; width:100%; height:100%; z-index:0; top:0; left:0;
+}
+
+/* Navbar */
+nav{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1rem 5%; position:sticky; top:0; z-index:10;
+}
+.logo{
+  font-size:2rem; font-weight:700; color:white;
+  text-shadow:0 0 10px #00f0ff, 0 0 20px #00f0ff;
+}
+nav ul{
+  display:flex; gap:2rem; list-style:none;
+}
+nav ul li a{
+  color:white; text-decoration:none; font-weight:500;
+}
+nav ul li a:hover{text-decoration:underline;}
+
+/* Hamburger for mobile */
+.menu-toggle{
+  display:none; flex-direction:column; cursor:pointer;
+}
+.menu-toggle span{
+  background:white; height:3px; width:25px; margin:4px 0; border-radius:5px;
+}
+
+/* Hero */
+.hero{
+  display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+  min-height:90vh; z-index:1; position:relative; padding:0 1rem;
+}
+.hero h1{
+  font-size:3rem; margin-bottom:1rem; color:#fff; text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
+}
+.hero p{
+  font-size:1.2rem; margin-bottom:2rem; max-width:700px; color:#b0e0ff;
+}
+.hero button{
+  padding:0.8rem 2rem; border:none; background:#00f0ff; color:#1e1e2f;
+  font-weight:700; font-size:1rem; border-radius:10px;
+  box-shadow:0 0 15px #00f0ff; transition: transform 0.3s, box-shadow 0.3s;
+}
+.hero button:hover{transform:scale(1.05); box-shadow:0 0 25px #00f0ff;}
+
+/* Features */
+.features{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:2rem; padding:4rem 5%; position:relative;
+}
+.feature-card{
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(12px);
+  border-radius:20px; padding:2rem; width:300px;
+  box-shadow:0 0 20px rgba(0,255,255,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.feature-card:hover{
+  transform:translateY(-10px); box-shadow:0 0 30px rgba(0,255,255,0.4);
+}
+.feature-card h3{margin-bottom:1rem; color:#00f0ff;}
+.feature-card p{font-size:0.95rem; line-height:1.5; color:#e0f7ff;}
+
+/* Counters */
+.counters{
+  display:flex; justify-content:center; gap:3rem; padding:4rem 5%; flex-wrap:wrap;
+}
+.counter{text-align:center;}
+.counter h2{font-size:2rem; color:#00f0ff;}
+.counter p{margin-top:0.5rem; color:#b0e0ff;}
+
+/* Footer */
+footer{
+  background: rgba(30,60,114,0.8); color:white; text-align:center; padding:2rem 1rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Modal */
+.modal{
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:20;
+}
+.modal-content{
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(15px);
+  padding:2rem; border-radius:20px; width:90%; max-width:360px; text-align:center;
+  box-shadow:0 0 30px #00f0ff;
+}
+.close{position:absolute; top:10px; right:15px; font-size:1.5rem; cursor:pointer; color:white;}
+.modal-content h2{margin-bottom:1rem; font-size:1.8rem;}
+.modal-content button{
+  width:100%; padding:0.8rem; margin:0.5rem 0; border:none; border-radius:15px;
+  font-weight:700; transition:all 0.3s;
+}
+.modal-content button:first-child{background:#00f0ff; color:#1e1e2f;}
+.modal-content button:last-child{background:#ff9900; color:white;}
+.modal-content button:hover{transform:scale(1.05);}
+
+/* Chat */
+#ai-box{
+  position:fixed; bottom:20px; right:20px; width:250px;
+  background:rgba(0,255,255,0.08); backdrop-filter:blur(12px);
+  border-radius:15px; padding:1rem; color:white; box-shadow:0 0 20px #00f0ff;
+  z-index:15; transition:all 0.3s;
+}
+#ai-box h4{margin-bottom:0.5rem; color:#00f0ff; cursor:pointer;}
+#chat-box{max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:0.5rem;}
+.chat-message{padding:6px 10px; border-radius:10px; font-size:0.9rem;}
+.chat-message.bot{background:rgba(0,255,255,0.15); align-self:flex-start;}
+.chat-message.user{background:rgba(255,255,255,0.15); align-self:flex-end;}
+#chat-input-area{display:flex; gap:5px;}
+#chat-input{
+  flex:1; border:none; border-radius:10px; padding:6px 8px;
+  background:rgba(255,255,255,0.1); color:white;
+}
+#send-btn{
+  border:none; background:#00f0ff; color:#1e1e2f; font-weight:700;
+  border-radius:8px; padding:6px 8px; cursor:pointer;
+}
+#ai-box.collapsed{height:50px; overflow:hidden; cursor:pointer;}
+
+/* ======= Responsive Design ======= */
+@media(max-width:900px){
+  .hero h1{font-size:2.3rem;}
+  .hero p{font-size:1rem;}
+  nav ul{gap:1.2rem;}
+}
+@media(max-width:768px){
+  nav ul{display:none; flex-direction:column; background:rgba(0,0,0,0.7);
+    position:absolute; top:60px; right:5%; width:200px; border-radius:10px; padding:1rem;}
+  nav ul.show{display:flex;}
+  .menu-toggle{display:flex;}
+  .hero h1{font-size:2rem;}
+  .feature-card{width:90%;}
+  #ai-box{width:200px; right:10px; bottom:10px;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:1.6rem;}
+  .hero p{font-size:0.9rem;}
+  .hero button{padding:0.6rem 1.5rem; font-size:0.9rem;}
+  .feature-card{padding:1.5rem;}
+  .counter h2{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+  <div class="logo">Solapur Digital Hub</div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+  <ul id="navLinks">
+    <li><a href="#exams">Live Exams</a></li>
+    <li><a href="#student">Student Management</a></li>
+    <li><a href="#admin">Admin Insights</a></li>
+    <li><a href="about">About Us</a></li>
+    <li><a href="#" id="loginBtn">Login</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <h1>Professional Online Exam Platform</h1>
+  <p>Practice tests, government exam simulations & more. Live-like exams, track results, manage students easily.</p>
+  <button onclick="document.getElementById('exams').scrollIntoView({behavior:'smooth'})">Get Started</button>
+</section>
+
+<section class="features" id="exams">
+  <div class="feature-card">
+    <h3>Today’s Live Exams</h3>
+    <p>Access and attempt live exams available today. Real-time progress and instant results!</p>
+  </div>
+  <div class="feature-card" id="student">
+    <h3>Student Management</h3>
+    <p>Register, attempt exams, and view detailed results for each student.</p>
+  </div>
+  <div class="feature-card" id="admin">
+    <h3>Admin Insights</h3>
+    <p>Dashboard with charts, score tracking, and CSV/PDF export options.</p>
+  </div>
+</section>
+
+<section class="counters">
+  <div class="counter">
+    <h2 class="counter-number" data-target="1250">0</h2>
+    <p>Students</p>
+  </div>
+  <div class="counter">
+    <h2 class="counter-number" data-target="300">0</h2>
+    <p>Exams Taken</p>
+  </div>
+  <div class="counter">
+    <h2 class="counter-number" data-target="150">0</h2>
+    <p>Questions</p>
+  </div>
+</section>
+
+<footer>&copy; 2025 Solapur Digital Hub. All rights reserved.</footer>
+
+<!-- Modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Login</h2>
+    <button onclick="window.location.href='/login'">Student Login</button>
+    <button onclick="window.location.href='/admin/login'">Admin Login</button>
+  </div>
+</div>
+
+<!-- Chat -->
+<div id="ai-box">
+  <h4>AI Assistant 🤖</h4>
+  <div id="chat-box"><div class="chat-message bot">Hello! How can I help you today? 😊</div></div>
+  <div id="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Type a message..." />
+    <button id="send-btn">➤</button>
+  </div>
+</div>
+
+<script>
+// Particles
+particlesJS("particles-js", {
+  "particles": {"number":{"value":60,"density":{"enable":true,"value_area":800}},
+  "color":{"value":"#00f0ff"},"shape":{"type":"circle"},"opacity":{"value":0.5},
+  "size":{"value":3},"line_linked":{"enable":true,"distance":150,"color":"#00f0ff","opacity":0.4,"width":1},
+  "move":{"enable":true,"speed":3}},"retina_detect":true
+});
+
+// Navbar toggle
+const menuToggle=document.getElementById('menuToggle');
+const navLinks=document.getElementById('navLinks');
+menuToggle.addEventListener('click',()=>{navLinks.classList.toggle('show');});
+
+// Counter animation
+const counters=document.querySelectorAll('.counter-number');
+counters.forEach(counter=>{
+  counter.innerText='0';
+  const updateCounter=()=>{
+    const target=+counter.getAttribute('data-target');
+    const c=+counter.innerText;
+    const increment=target/200;
+    if(c<target){counter.innerText=`${Math.ceil(c+increment)}`;setTimeout(updateCounter,20);}
+    else counter.innerText=target;
+  }; updateCounter();
+});
+
+// Modal
+const modal=document.getElementById('loginModal');
+const loginBtn=document.getElementById('loginBtn');
+const closeModal=document.getElementById('closeModal');
+loginBtn.addEventListener('click',()=>{modal.style.display='flex';});
+closeModal.addEventListener('click',()=>{modal.style.display='none';});
+window.addEventListener('click',e=>{if(e.target===modal) modal.style.display='none';});
+
+// Chat
+const aiBox=document.getElementById('ai-box');
+const chatBox=document.getElementById('chat-box');
+const input=document.getElementById('chat-input');
+const sendBtn=document.getElementById('send-btn');
+const aiHeader=aiBox.querySelector('h4');
+aiHeader.addEventListener('click',()=>aiBox.classList.toggle('collapsed'));
+sendBtn.addEventListener('click',sendMessage);
+input.addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
+
+function sendMessage(){
+  const userMsg=input.value.trim();
+  if(userMsg==='')return;
+  appendMessage(userMsg,'user');
+  input.value='';
+  setTimeout(()=>{appendMessage(getBotReply(userMsg),'bot');},600);
+}
+function appendMessage(text,sender){
+  const msg=document.createElement('div');
+  msg.classList.add('chat-message',sender);
+  msg.textContent=text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop=chatBox.scrollHeight;
+}
+function getBotReply(input){
+  input=input.toLowerCase();
+  if(input.includes('hello')) return "Hi there! 👋 How can I assist you today?";
+  if(input.includes('exam')) return "You can check your live exams in the 'Today’s Live Exams' section!";
+  if(input.includes('login')) return "Click the Login button on the top right to access your account.";
+  return "I’m here to help with exams, login, or student info!";
+}
+</script>
+</body>
+</html>
